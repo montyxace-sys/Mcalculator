@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>Mcalculator.Core</AssemblyName>
+    <RootNamespace>Mcalculator.Core</RootNamespace>
+    <Version>0.1.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Motor de expresiones, licencia MIT (github.com/ncalc/ncalc). -->
+    <PackageReference Include="NCalc" Version="7.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mcalculator.CoreTests" />
+  </ItemGroup>
+
+</Project>
