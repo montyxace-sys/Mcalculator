@@ -1,0 +1,68 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package
+    Name="Mcalculator"
+    Manufacturer="MSoft"
+    Version="0.1.0"
+    UpgradeCode="8C4F2B71-5D3A-4E62-9F18-7A6C2D4B9E30"
+    Scope="perUser"
+    Compressed="yes"
+    InstallerVersion="500">
+
+    <MajorUpgrade DowngradeErrorMessage="Ya hay una versión más reciente de Mcalculator instalada." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="AppIcon" SourceFile="$(var.IconFile)" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+    <Property Id="ARPNOREPAIR" Value="1" />
+    <Property Id="ARPCONTACT" Value="MSoft" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/montyxace-sys/Mcalculator" />
+
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="ProgramsFolder" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="Mcalculator" />
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="AppProgramMenuDir" Name="Mcalculator" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+
+    <Feature Id="Main" Title="Mcalculator" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="DesktopShortcut" />
+    </Feature>
+
+    <ComponentGroup Id="AppFiles">
+      <Component Id="MainExecutable" Directory="INSTALLFOLDER" Guid="1A2B3C4D-5E6F-4A7B-8C9D-0E1F2A3B4C5D">
+        <File Id="McalculatorExe" Source="$(var.SourceDir)\Mcalculator.exe" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <Component Id="StartMenuShortcut" Directory="AppProgramMenuDir" Guid="2B3C4D5E-6F70-4B8C-9DAE-1F2A3B4C5D6E">
+      <Shortcut
+        Id="AppShortcut"
+        Name="Mcalculator"
+        Description="Calculadora científica"
+        Target="[INSTALLFOLDER]Mcalculator.exe"
+        WorkingDirectory="INSTALLFOLDER"
+        Icon="AppIcon" />
+      <RemoveFolder Id="RemoveAppProgramMenuDir" On="uninstall" />
+      <RegistryValue Root="HKCU" Key="Software\MSoft\Mcalculator" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+
+    <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="3C4D5E6F-7081-4C9D-AEBF-2A3B4C5D6E7F">
+      <Shortcut
+        Id="DesktopAppShortcut"
+        Name="Mcalculator"
+        Description="Calculadora científica"
+        Target="[INSTALLFOLDER]Mcalculator.exe"
+        WorkingDirectory="INSTALLFOLDER"
+        Icon="AppIcon" />
+      <RegistryValue Root="HKCU" Key="Software\MSoft\Mcalculator" Name="desktop" Type="integer" Value="1" KeyPath="yes" />
+    </Component>
+  </Package>
+</Wix>
