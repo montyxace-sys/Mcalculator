@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Compilar y probar
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restaurar
+        shell: pwsh
+        run: dotnet restore Mcalculator.slnx
+
+      - name: Compilar
+        shell: pwsh
+        run: dotnet build Mcalculator.slnx --no-restore -c Release --warnaserror
+
+      # Las pruebas son una consola que devuelve 0 cuando todo pasa.
+      - name: Probar
+        shell: pwsh
+        run: dotnet run --project tests/Mcalculator.CoreTests/Mcalculator.CoreTests.csproj -c Release --no-build
