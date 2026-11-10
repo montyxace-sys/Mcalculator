@@ -1,6 +1,7 @@
 <Window x:Class="Mcalculator.App.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Mcalculator.App"
         Title="Mcalculator" Height="880" Width="760" MinHeight="680" MinWidth="620"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource BgBrush}"
@@ -76,6 +77,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Memoria -->
@@ -148,6 +150,14 @@
                         <Button Grid.Row="4" Style="{StaticResource CalcKeyEquals}" Content="=" Click="Equals_Click" />
                     </Grid>
                 </Grid>
+
+                <!-- Paneles: unidades y programador -->
+                <Expander Grid.Row="3" x:Name="ExtrasExpander" Header="Unidades y programador"
+                          Foreground="{StaticResource MutedBrush}" FontSize="12"
+                          Margin="3,8,3,0" IsExpanded="False"
+                          Expanded="Extras_Expanded">
+                    <local:Panels x:Name="ExtraPanels" Margin="0,8,0,0" />
+                </Expander>
             </Grid>
 
             <!-- Historial -->

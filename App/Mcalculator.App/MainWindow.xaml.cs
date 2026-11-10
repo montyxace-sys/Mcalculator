@@ -362,4 +362,11 @@ public partial class MainWindow : Window
     }
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
+
+    private void Extras_Expanded(object sender, RoutedEventArgs e)
+    {
+        // Al desplegar los paneles la ventana crece un poco para que se vean enteros.
+        if (Height < 980)
+            Height = 980;
+    }
 }
