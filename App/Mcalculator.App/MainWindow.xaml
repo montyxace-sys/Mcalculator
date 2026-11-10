@@ -1,0 +1,185 @@
+<Window x:Class="Mcalculator.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mcalculator" Height="880" Width="760" MinHeight="680" MinWidth="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}"
+        FontFamily="Segoe UI"
+        UseLayoutRounding="True" SnapsToDevicePixels="True"
+        TextOptions.TextFormattingMode="Display">
+
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Barra superior -->
+        <Grid Grid.Row="0" Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <Border Width="30" Height="30" CornerRadius="9" Background="{StaticResource AccentGradient}">
+                    <TextBlock Text="=" FontSize="18" FontWeight="Bold" Foreground="White"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="Mcalculator" FontSize="15" FontWeight="SemiBold" Margin="10,0,0,0"
+                           VerticalAlignment="Center" />
+                <TextBlock x:Name="MemoryIndicator" Text="" FontSize="11.5" Margin="12,0,0,0"
+                           Foreground="{StaticResource AccentBrush}" VerticalAlignment="Center"
+                           Visibility="Collapsed" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <Button x:Name="AngleButton" Style="{StaticResource SecondaryButton}" Content="DEG"
+                        Padding="10,5" FontSize="11.5" FontWeight="SemiBold" Margin="0,0,6,0"
+                        Click="Angle_Click" ToolTip="Alternar grados / radianes" />
+                <Button Style="{StaticResource IconButton}" Content="&#xE8C8;" Click="Copy_Click"
+                        ToolTip="Copiar el resultado (Ctrl+C)" />
+                <Button Style="{StaticResource IconButton}" Content="&#xE711;" Click="Close_Click"
+                        ToolTip="Cerrar" />
+            </StackPanel>
+        </Grid>
+
+        <!-- Pantalla -->
+        <Border Grid.Row="1" Style="{StaticResource Card}" Margin="0,0,0,12" Padding="18,14">
+            <StackPanel>
+                <TextBlock x:Name="PreviewBox" Text="" FontSize="13" Foreground="{StaticResource MutedBrush}"
+                           HorizontalAlignment="Right" MinHeight="18" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="ExpressionBox" Text="" FontSize="16" Foreground="{StaticResource MutedBrush}"
+                           HorizontalAlignment="Right" Margin="0,2,0,0" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="ResultBox" Text="0" FontSize="40" FontWeight="Light"
+                           Foreground="{StaticResource TextBrush}" HorizontalAlignment="Right"
+                           Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="ErrorText" Text="" FontSize="12" Foreground="{StaticResource RedBrush}"
+                           HorizontalAlignment="Right" Margin="0,6,0,0" Visibility="Collapsed"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <!-- Zona central: teclado + historial -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="240" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Teclado -->
+            <Grid Grid.Column="0" Margin="0,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Memoria -->
+                <UniformGrid Grid.Row="0" Rows="1" Margin="0,0,0,4">
+                    <Button Style="{StaticResource CalcKeySoft}" Content="MC" Tag="MC" Click="Memory_Click" Height="30" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="MR" Tag="MR" Click="Memory_Click" Height="30" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="M+" Tag="M+" Click="Memory_Click" Height="30" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="M−" Tag="M-" Click="Memory_Click" Height="30" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="MS" Tag="MS" Click="Memory_Click" Height="30" />
+                </UniformGrid>
+
+                <!-- Funciones -->
+                <UniformGrid Grid.Row="1" Columns="6" Margin="0,0,0,4">
+                    <Button Style="{StaticResource CalcKeySoft}" Content="sin" Tag="sin(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="cos" Tag="cos(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="tan" Tag="tan(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="ln" Tag="ln(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="log" Tag="log(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="√" Tag="√(" Click="Function_Click" />
+
+                    <Button Style="{StaticResource CalcKeySoft}" Content="x²" Tag="²" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="xʸ" Tag="^" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="n!" Tag="fact(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="π" Tag="π" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="e" Tag="e" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="1/x" Tag="1/(" Click="Function_Click" />
+
+                    <Button Style="{StaticResource CalcKeySoft}" Content="(" Tag="(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content=")" Tag=")" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="%" Tag="%" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="abs" Tag="abs(" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="Ans" Tag="ans" Click="Function_Click" />
+                    <Button Style="{StaticResource CalcKeySoft}" Content="⌫" Click="Backspace_Click" />
+                </UniformGrid>
+
+                <!-- Números y operadores -->
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+
+                    <UniformGrid Grid.Column="0" Columns="3" Rows="4">
+                        <Button Style="{StaticResource CalcKey}" Content="7" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="8" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="9" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="4" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="5" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="6" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="1" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="2" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="3" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="0" Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="," Click="Digit_Click" />
+                        <Button Style="{StaticResource CalcKey}" Content="⌫" Click="Backspace_Click" />
+                    </UniformGrid>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Button Grid.Row="0" Style="{StaticResource CalcKeyOperator}" Content="÷" Click="Operator_Click" />
+                        <Button Grid.Row="1" Style="{StaticResource CalcKeyOperator}" Content="×" Click="Operator_Click" />
+                        <Button Grid.Row="2" Style="{StaticResource CalcKeyOperator}" Content="−" Click="Operator_Click" />
+                        <Button Grid.Row="3" Style="{StaticResource CalcKeyOperator}" Content="+" Click="Operator_Click" />
+                        <Button Grid.Row="4" Style="{StaticResource CalcKeyEquals}" Content="=" Click="Equals_Click" />
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!-- Historial -->
+            <Border Grid.Column="1" Style="{StaticResource Card}" Padding="10">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" Margin="2,0,2,8">
+                        <TextBlock Text="HISTORIAL" FontSize="10" FontWeight="SemiBold"
+                                   Foreground="{StaticResource MutedBrush}" VerticalAlignment="Center" />
+                        <Button Style="{StaticResource IconButton}" Content="&#xE74D;" Width="24" Height="24"
+                                FontSize="11" HorizontalAlignment="Right" Click="ClearHistory_Click"
+                                ToolTip="Borrar el historial" />
+                    </Grid>
+
+                    <Grid Grid.Row="1">
+                        <ListBox x:Name="HistoryList" Background="Transparent" BorderThickness="0"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 MouseDoubleClick="History_DoubleClick" />
+                        <TextBlock x:Name="HistoryEmpty" Text="Aquí aparecerán tus cálculos."
+                                   Style="{StaticResource MutedText}" TextWrapping="Wrap"
+                                   VerticalAlignment="Top" Margin="4,10,4,0" />
+                    </Grid>
+
+                    <Button Grid.Row="2" Style="{StaticResource SecondaryButton}" Content="Cerrar"
+                            Margin="0,8,0,0" Click="Close_Click" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>

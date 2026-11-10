@@ -125,6 +125,9 @@ public sealed class CalculatorEngine
 
     public bool RemoveVariable(string name) => _variables.Remove(name);
 
+    /// <summary>Define una variable desde fuera (Ans, memoria…).</summary>
+    public void SetVariable(string name, double value) => _variables[name] = value;
+
     public void ClearVariables() => _variables.Clear();
 
     private void RegisterFunctions(Expression expression)

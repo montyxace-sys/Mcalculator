@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/App/">
+    <Project Path="App/Mcalculator.App/Mcalculator.App.csproj" />
+  </Folder>
   <Folder Name="/Core/">
     <Project Path="Core/Mcalculator.Core/Mcalculator.Core.csproj" />
   </Folder>
