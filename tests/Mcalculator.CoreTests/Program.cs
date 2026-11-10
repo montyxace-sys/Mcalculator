@@ -32,6 +32,7 @@ internal static class Program
         VariableTests();
         UnitTests();
         FormatTests();
+        GraphTests();
 
         Console.WriteLine();
         Console.WriteLine($"{_checks} comprobaciones, {_failures} fallos.");
@@ -200,6 +201,53 @@ internal static class Program
         {
             return true;
         }
+    }
+
+    private static void GraphTests()
+    {
+        Console.WriteLine("Gráficas");
+
+        var graph = new GraphModel();
+        Check("rango X por defecto", graph.XRange.Min == -10 && graph.XRange.Max == 10);
+        Check("rango Y por defecto", graph.YRange.Min < 0 && graph.YRange.Max > 0);
+
+        var points = graph.Sample("x**2", 100);
+        Check("muestrea 101 puntos", points.Count == 101);
+        Check("empieza en el mínimo", Math.Abs(points[0].X + 10) < 1e-9);
+        Check("termina en el máximo", Math.Abs(points[^1].X - 10) < 1e-9);
+        Check("x=0 da 0", Math.Abs(points.First(p => Math.Abs(p.X) < 0.11).Y) < 0.02);
+        Check("x=10 da 100", Math.Abs(graph.EvaluateAt("x**2", 10) - 100) < 1e-9);
+        Check("x=-3 da 9", Math.Abs(graph.EvaluateAt("x**2", -3) - 9) < 1e-9);
+
+        Check("sin(0) = 0", Math.Abs(graph.EvaluateAt("sin(x)", 0)) < 1e-9);
+        Check("división por cero da infinito", double.IsInfinity(graph.EvaluateAt("1/0", 1)));
+        Check("expresión rota da NaN", double.IsNaN(graph.EvaluateAt("x++", 1)));
+
+        // sqrt no está definida para x < 0: debe salir NaN y no romper.
+        var sqrtPoints = graph.Sample("sqrt(x)", 50);
+        Check("sqrt en negativos da NaN", sqrtPoints.Take(20).All(p => double.IsNaN(p.Y)));
+        Check("sqrt en positivos da valor", sqrtPoints.Skip(40).Any(p => !double.IsNaN(p.Y)));
+
+        Check("la variable x no queda definida", !graph.OrphanCheck());
+
+        var ticks = GraphModel.NiceTicks(new GraphRange(-10, 10), 10);
+        Check("hay saltos redondos", ticks.Count is > 2 and < 30);
+        Check("incluye el cero", ticks.Any(t => Math.Abs(t) < 1e-12));
+        Check("los saltos son uniformes",
+            ticks.Zip(ticks.Skip(1)).All(pair => Math.Abs(pair.Second - pair.First - (ticks[1] - ticks[0])) < 1e-9));
+
+        Check("etiqueta entera", GraphModel.TickLabel(5, Spanish) == "5");
+        Check("etiqueta decimal", GraphModel.TickLabel(2.5, Spanish) == "2,5");
+        Check("etiqueta negativa", GraphModel.TickLabel(-3, Spanish) == "-3");
+
+        graph.XRange = graph.XRange.Zoom(0.5);
+        Check("zoom reduce el rango", Math.Abs(graph.XRange.Span - 10) < 1e-9);
+        graph.Reset();
+        Check("reiniciar vuelve a -10..10", Math.Abs(graph.XRange.Span - 20) < 1e-9);
+
+        graph.FitY(graph.Sample("x**2", 100));
+        Check("ajustar Y deja el mínimo dentro", graph.YRange.Min <= 0);
+        Check("ajustar Y deja el máximo dentro", graph.YRange.Max >= 100);
     }
 
     private static void FormatTests()

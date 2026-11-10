@@ -363,6 +363,28 @@ public partial class MainWindow : Window
 
     private void Close_Click(object sender, RoutedEventArgs e) => Close();
 
+    private void Graph_Expanded(object sender, RoutedEventArgs e)
+    {
+        if (Height < 1080)
+            Height = 1080;
+        Graph_Draw(sender, e);
+    }
+
+    private void Graph_Draw(object sender, RoutedEventArgs e)
+    {
+        var text = (GraphInput.Text ?? "").Trim();
+        if (text.Length == 0)
+            return;
+
+        // Varias funciones separadas por ";".
+        var expressions = text.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        GraphCanvas.SetFunctions(expressions);
+    }
+
+    private void Graph_Fit(object sender, RoutedEventArgs e) => GraphCanvas.FitY();
+
+    private void Graph_Reset(object sender, RoutedEventArgs e) => GraphCanvas.ResetView();
+
     private void Extras_Expanded(object sender, RoutedEventArgs e)
     {
         // Al desplegar los paneles la ventana crece un poco para que se vean enteros.

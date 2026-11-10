@@ -152,12 +152,40 @@
                 </Grid>
 
                 <!-- Paneles: unidades y programador -->
-                <Expander Grid.Row="3" x:Name="ExtrasExpander" Header="Unidades y programador"
-                          Foreground="{StaticResource MutedBrush}" FontSize="12"
-                          Margin="3,8,3,0" IsExpanded="False"
-                          Expanded="Extras_Expanded">
-                    <local:Panels x:Name="ExtraPanels" Margin="0,8,0,0" />
-                </Expander>
+                <StackPanel Grid.Row="3" Margin="3,8,3,0">
+                    <Expander x:Name="ExtrasExpander" Header="Unidades y programador"
+                              Foreground="{StaticResource MutedBrush}" FontSize="12"
+                              IsExpanded="False" Expanded="Extras_Expanded">
+                        <local:Panels x:Name="ExtraPanels" Margin="0,8,0,0" />
+                    </Expander>
+
+                    <Expander x:Name="GraphExpander" Header="Gráfica  y = f(x)"
+                              Foreground="{StaticResource MutedBrush}" FontSize="12"
+                              Margin="0,6,0,0" IsExpanded="False" Expanded="Graph_Expanded">
+                        <StackPanel Margin="0,8,0,0">
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="GraphInput" Grid.Column="0" Style="{StaticResource FlatTextBox}"
+                                         Height="32" Background="{StaticResource Surface2Brush}" Padding="10,0"
+                                         Text="sin(x)" ToolTip="Escribe f(x). Puedes separar varias funciones con ;" />
+                                <Button Grid.Column="1" Style="{StaticResource SecondaryButton}" Content="Dibujar"
+                                        Margin="8,0,0,0" Click="Graph_Draw" />
+                                <Button Grid.Column="2" Style="{StaticResource SecondaryButton}" Content="Ajustar Y"
+                                        Margin="6,0,0,0" Click="Graph_Fit" />
+                                <Button Grid.Column="3" Style="{StaticResource SecondaryButton}" Content="Reiniciar"
+                                        Margin="6,0,0,0" Click="Graph_Reset" />
+                            </Grid>
+                            <local:GraphView x:Name="GraphCanvas" Height="300" />
+                            <TextBlock Text="Rueda del ratón para acercar · arrastra para mover"
+                                       Style="{StaticResource MutedText}" Margin="2,6,0,0" />
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
             </Grid>
 
             <!-- Historial -->
